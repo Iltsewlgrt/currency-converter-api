@@ -8,9 +8,9 @@ const router = Router();
 router.get('/', async (req: Request, res: Response) => {
   try {
     const cacheKey = 'currencies_list';
-    
+
     let currencies = memoryCache.get<string[]>(cacheKey);
-    
+
     if (!currencies) {
       currencies = await exchangeRateService.getCurrencies();
       memoryCache.set(cacheKey, currencies, config.cache.currenciesCacheDuration);

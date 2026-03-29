@@ -11,11 +11,11 @@ export class SupabaseService {
     const { data, error } = await supabase
       .from('users')
       .insert({
-        user_id: userId,            // первичный ключ, uuid
-        base_currency: 'USD',       // по умолчанию USD при первом запросе
-        favorites: [],              // массив строк
-        created_at: nowISO,         // дата создания в формате ISO8601
-        updated_at: nowISO,         // дата обновления в формате ISO8601
+        user_id: userId, // первичный ключ, uuid
+        base_currency: 'USD', // по умолчанию USD при первом запросе
+        favorites: [], // массив строк
+        created_at: nowISO, // дата создания в формате ISO8601
+        updated_at: nowISO, // дата обновления в формате ISO8601
       })
       .select()
       .single();
@@ -25,11 +25,7 @@ export class SupabaseService {
   }
 
   async getUser(userId: string): Promise<UserSettings | null> {
-    const { data, error } = await supabase
-      .from('users')
-      .select('*')
-      .eq('user_id', userId)
-      .single();
+    const { data, error } = await supabase.from('users').select('*').eq('user_id', userId).single();
 
     if (error && error.code !== 'PGRST116') throw error;
     return data;
@@ -63,8 +59,8 @@ export class SupabaseService {
     if (data) {
       const cachedTime = new Date(data.cached_at).getTime();
       const now = Date.now();
-      
-      // Проверка на 24 часа. 
+
+      // Проверка на 24 часа.
       // Если config.cache.dbCacheDuration не задан, используем 24 * 60 * 60 * 1000 (86400000 мс)
       const maxCacheAge = config.cache?.dbCacheDuration || 86400000;
 
@@ -78,18 +74,19 @@ export class SupabaseService {
   }
 
   async saveExchangeRate(base: string, target: string, rate: number): Promise<void> {
-    const { error } = await supabase
-      .from('exchange_rates')
-      .upsert({
+    const { error } = await supabase.from('exchange_rates').upsert(
+      {
         base_currency: base,
         target_currency: target,
         rate,
         cached_at: new Date().toISOString(), // фиксируем время сохранения в БД
-      }, {
+      },
+      {
         // Указываем поля, по которым Supabase поймет, что нужно обновить запись, а не создать новую
         // Предполагается, что в БД есть уникальный индекс на пару (base_currency, target_currency)
-        onConflict: 'base_currency, target_currency' 
-      });
+        onConflict: 'base_currency, target_currency',
+      },
+    );
 
     if (error) throw error;
   }

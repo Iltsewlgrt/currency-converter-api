@@ -6,14 +6,12 @@ class ExchangeRateService {
 
   async getCurrencies(): Promise<string[]> {
     try {
-      const response = await axios.get(
-        `${this.baseUrl}/${config.exchangeApiKey}/codes`
-      );
-      
+      const response = await axios.get(`${this.baseUrl}/${config.exchangeApiKey}/codes`);
+
       if (response.data.result === 'success') {
         return response.data.supported_codes.map((code: [string, string]) => code[0]);
       }
-      
+
       throw new Error('Failed to fetch currencies');
     } catch (error) {
       console.error('Error fetching currencies:', error);
@@ -25,13 +23,11 @@ class ExchangeRateService {
     const rates: { [key: string]: number } = {};
 
     try {
-      const response = await axios.get(
-        `${this.baseUrl}/${config.exchangeApiKey}/latest/${base}`
-      );
+      const response = await axios.get(`${this.baseUrl}/${config.exchangeApiKey}/latest/${base}`);
 
       if (response.data.result === 'success') {
         const conversionRates = response.data.conversion_rates;
-        
+
         for (const target of targets) {
           if (conversionRates[target]) {
             rates[target] = conversionRates[target];

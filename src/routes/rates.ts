@@ -7,19 +7,21 @@ const router = Router();
 router.get('/', async (req: Request, res: Response) => {
   try {
     const userId = (req as any).userId;
-    
+
     let base = req.query.base as string;
     const targetsQuery = req.query.targets as string;
 
     if (!targetsQuery) {
-      return res.status(400).json({ error: 'targets parameter is required (e.g., targets=EUR,GBP)' });
+      return res
+        .status(400)
+        .json({ error: 'targets parameter is required (e.g., targets=EUR,GBP)' });
     }
 
-    const targets = targetsQuery.split(',').map(t => t.trim().toUpperCase());
+    const targets = targetsQuery.split(',').map((t) => t.trim().toUpperCase());
 
     if (!base) {
-      let user = await supabaseService.getUser(userId);
-      
+      const user = await supabaseService.getUser(userId);
+
       if (!user) {
         await supabaseService.createUser(userId);
         base = 'USD';
@@ -49,7 +51,6 @@ router.get('/', async (req: Request, res: Response) => {
     }
 
     if (missingTargets.length > 0) {
-            
       const externalRates = await exchangeRateService.getRates(base, missingTargets);
 
       for (const target of missingTargets) {
@@ -63,9 +64,8 @@ router.get('/', async (req: Request, res: Response) => {
 
     res.json({
       base,
-      rates
+      rates,
     });
-
   } catch (error) {
     console.error('Error in /api/rates:', error);
     res.status(500).json({ error: 'Failed to fetch exchange rates' });

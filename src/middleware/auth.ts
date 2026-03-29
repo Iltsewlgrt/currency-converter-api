@@ -4,6 +4,7 @@ import { supabaseService } from '../services/supabase';
 
 // Расширяем интерфейс Request для TypeScript, чтобы он знал о существовании req.userId
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
       userId?: string;
@@ -20,13 +21,13 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
 
       res.cookie('user_id', userId, {
         httpOnly: true, // Защита от кражи куки через JS
-        maxAge: 365 * 24 * 60 * 60 * 1000, 
+        maxAge: 365 * 24 * 60 * 60 * 1000,
         sameSite: 'strict',
       });
     }
 
     req.userId = userId;
-    
+
     next();
   } catch (error) {
     console.error('Auth middleware error:', error);

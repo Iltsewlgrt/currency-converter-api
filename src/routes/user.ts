@@ -7,9 +7,9 @@ const router = Router();
 router.get('/', async (req: Request, res: Response) => {
   try {
     const userId = (req as any).userId;
-    
+
     const user = await supabaseService.getUser(userId);
-    
+
     if (!user) {
       return res.status(404).json({ error: 'User not found in database' });
     }

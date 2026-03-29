@@ -24,7 +24,7 @@ export function memoryCacheMiddleware(req: Request, res: Response, next: NextFun
   const now = Date.now();
 
   // Проверяем, есть ли запись в кэше и не прошло ли 5 минут
-  if (cachedEntry && (now - cachedEntry.timestamp < CACHE_DURATION)) {
+  if (cachedEntry && now - cachedEntry.timestamp < CACHE_DURATION) {
     console.log(`[CACHE HIT] Отдаем из памяти: ${req.originalUrl}`);
     return res.json(cachedEntry.data);
   }
@@ -38,7 +38,7 @@ export function memoryCacheMiddleware(req: Request, res: Response, next: NextFun
     });
 
     console.log(`[CACHE SAVED] Сохранили в память: ${req.originalUrl}`);
-    
+
     return originalJson(body);
   };
 

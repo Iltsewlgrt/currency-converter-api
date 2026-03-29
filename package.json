@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "nodemon src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "lint": "eslint src/**/*.ts",
+    "format": "prettier --write src/**/*.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0",
@@ -27,7 +29,13 @@
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.8",
     "@types/uuid": "^9.0.7",
+    "@typescript-eslint/eslint-plugin": "^8.57.2",
+    "@typescript-eslint/parser": "^8.57.2",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
     "nodemon": "^3.0.2",
+    "prettier": "^3.8.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }

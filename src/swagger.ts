@@ -37,7 +37,9 @@ const options: swaggerJsdoc.Options = {
           responses: {
             200: {
               description: 'Успешный ответ',
-              content: { 'application/json': { schema: { type: 'array', items: { type: 'string' } } } },
+              content: {
+                'application/json': { schema: { type: 'array', items: { type: 'string' } } },
+              },
             },
           },
         },
@@ -45,10 +47,22 @@ const options: swaggerJsdoc.Options = {
       '/api/rates': {
         get: {
           summary: 'Получить курсы валют',
-          description: 'Возвращает курсы переданных валют относительно базовой. Кэшируется в БД на 24 часа.',
+          description:
+            'Возвращает курсы переданных валют относительно базовой. Кэшируется в БД на 24 часа.',
           parameters: [
-            { name: 'base', in: 'query', schema: { type: 'string' }, description: 'Базовая валюта (если нет, берется из настроек юзера)' },
-            { name: 'targets', in: 'query', required: true, schema: { type: 'string' }, description: 'Целевые валюты через запятую (например EUR,GBP)' },
+            {
+              name: 'base',
+              in: 'query',
+              schema: { type: 'string' },
+              description: 'Базовая валюта (если нет, берется из настроек юзера)',
+            },
+            {
+              name: 'targets',
+              in: 'query',
+              required: true,
+              schema: { type: 'string' },
+              description: 'Целевые валюты через запятую (например EUR,GBP)',
+            },
           ],
           responses: {
             200: {
@@ -57,7 +71,10 @@ const options: swaggerJsdoc.Options = {
                 'application/json': {
                   schema: {
                     type: 'object',
-                    properties: { base: { type: 'string' }, rates: { type: 'object', additionalProperties: { type: 'number' } } },
+                    properties: {
+                      base: { type: 'string' },
+                      rates: { type: 'object', additionalProperties: { type: 'number' } },
+                    },
                   },
                 },
               },
@@ -69,15 +86,35 @@ const options: swaggerJsdoc.Options = {
         get: {
           summary: 'Получить настройки пользователя',
           description: 'Возвращает настройки текущего пользователя по куке user_id.',
-          responses: { 200: { description: 'Настройки пользователя', content: { 'application/json': { schema: { $ref: '#/components/schemas/User' } } } } },
+          responses: {
+            200: {
+              description: 'Настройки пользователя',
+              content: { 'application/json': { schema: { $ref: '#/components/schemas/User' } } },
+            },
+          },
         },
         post: {
           summary: 'Обновить настройки пользователя',
           requestBody: {
             required: true,
-            content: { 'application/json': { schema: { type: 'object', properties: { base_currency: { type: 'string', example: 'EUR' }, favorites: { type: 'array', items: { type: 'string' }, example: ['GBP'] } } } } },
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    base_currency: { type: 'string', example: 'EUR' },
+                    favorites: { type: 'array', items: { type: 'string' }, example: ['GBP'] },
+                  },
+                },
+              },
+            },
           },
-          responses: { 200: { description: 'Обновленные настройки', content: { 'application/json': { schema: { $ref: '#/components/schemas/User' } } } } },
+          responses: {
+            200: {
+              description: 'Обновленные настройки',
+              content: { 'application/json': { schema: { $ref: '#/components/schemas/User' } } },
+            },
+          },
         },
       },
     },
